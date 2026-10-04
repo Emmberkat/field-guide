@@ -35,6 +35,10 @@ export default defineConfig({
           label: "Shipping changes",
           items: [{ autogenerate: { directory: "shipping" } }],
         },
+        {
+          label: "Working with LLMs",
+          items: [{ autogenerate: { directory: "llms" } }],
+        },
       ],
     }),
   ],
