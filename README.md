@@ -10,7 +10,8 @@ Published at <https://emmberkat.github.io/field-guide/>. Built with
 ```
 src/content/docs/
   index.mdx            Home page
-  testing/             The testing chapter, one page per part
+  <chapter>/           One directory per chapter, one page per topic
+    index.md           Chapter overview (optional)
 ```
 
 Each chapter is a directory under `src/content/docs/`, listed in the sidebar

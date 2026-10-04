@@ -20,6 +20,10 @@ export default defineConfig({
 			},
 			sidebar: [
 				{
+					label: 'Design',
+					items: [{ autogenerate: { directory: 'design' } }],
+				},
+				{
 					label: 'Testing',
 					items: [{ autogenerate: { directory: 'testing' } }],
 				},

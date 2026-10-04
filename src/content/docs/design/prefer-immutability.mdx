@@ -1,0 +1,128 @@
+---
+title: "Prefer immutability"
+description: "Build values that cannot change after construction, and make change explicit by returning new values."
+sidebar:
+  order: 4
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+A value that cannot change after it is built is a value you can stop
+worrying about. You can pass it anywhere, share it between threads, use
+it as a dictionary key, and cache it without a defensive copy. When you
+read it, you know nothing else is changing it while you look. And the
+invariants you checked when you built it stay true, which is what makes
+[validating in the
+constructor](../../testing/deciding-what-to-test/#make-it-impossible-before-you-make-it-tested)
+worth anything. A constructor check means little if any caller can
+change the fields a line later.
+
+Make values immutable by default, and make change explicit: instead of
+modifying a value, return a new one.
+
+<Tabs>
+<TabItem label="Python">
+
+```python
+@dataclass(frozen=True)
+class Order:
+    id: str
+    lines: tuple[OrderLine, ...]
+    status: Status = Status.OPEN
+
+    def with_line(self, line: OrderLine) -> "Order":
+        return replace(self, lines=(*self.lines, line))
+
+    def close(self) -> "Order":
+        return replace(self, status=Status.CLOSED)
+```
+
+</TabItem>
+<TabItem label="Java">
+
+```java
+record Order(String id, List<OrderLine> lines, Status status) {
+    Order {
+        lines = List.copyOf(lines);
+    }
+
+    Order withLine(OrderLine line) {
+        var newLines = new ArrayList<>(lines);
+        newLines.add(line);
+        return new Order(id, newLines, status);
+    }
+
+    Order close() {
+        return new Order(id, lines, Status.CLOSED);
+    }
+}
+```
+
+</TabItem>
+</Tabs>
+
+Nothing that holds an `Order` can be surprised by it changing. Code that
+wants a different order has to say so, and the old one is still there,
+unchanged, for anyone who was using it.
+
+## Shallow is not immutable
+
+A frozen dataclass or a Java record only stops you from reassigning its
+fields. If a field holds a list, the list itself can still change, and
+every holder of the value sees it:
+
+```python
+@dataclass(frozen=True)
+class Order:
+    lines: list[OrderLine]
+
+
+order.lines.append(extra)  # Allowed, and visible to everyone holding `order`.
+```
+
+Hold immutable collections inside immutable values: tuples and
+`frozenset` in Python, and `List.copyOf`, `Set.copyOf`, or `Map.copyOf`
+in a record's compact constructor in Java. Copy on the way in, so a
+caller who kept a reference to the list they passed cannot change your
+value through it.
+
+## Language specifics
+
+Python:
+
+- Use `@dataclass(frozen=True)` for values and `dataclasses.replace` to
+  derive a changed copy.
+- Annotate module-level constants with `Final`, so the type checker
+  flags reassignment.
+- Never use a mutable default argument. `def add(item, items=[])` shares
+  one list across every call that relies on the default. Default to
+  `None` and create the list inside, or better, take and return a tuple.
+- `object.__setattr__` gets around `frozen=True`. That is for
+  normalizing a field in `__post_init__`, and nowhere else.
+
+Java:
+
+- Use records for values, and `final` on fields and on locals that
+  should not be reassigned.
+- `List.of`, `Set.of`, `Map.of`, and their `copyOf` variants return
+  unmodifiable collections. `Collections.unmodifiableList` does not: it
+  returns a read-only view, and whoever holds the original list can
+  still change what you see.
+- Prefer returning a new object to calling a setter. If a class needs
+  setters to be usable, it may really be a builder.
+
+## Where mutation is fine
+
+Immutability is a default, not a religion. Mutation is fine where nobody
+else can see it:
+
+- A local list you build up inside a function and then return. Nobody
+  else holds it until you hand it over, and you can hand it over as a
+  tuple or an unmodifiable list.
+- A builder, whose whole job is to accumulate state and then produce an
+  immutable result.
+- A hot path where allocating new values is the measured bottleneck.
+  Measured, not suspected.
+- The edges of the system: the database, the file, the socket. Those are
+  mutable by nature. Keep the mutation there, and pass immutable values
+  through the middle.
