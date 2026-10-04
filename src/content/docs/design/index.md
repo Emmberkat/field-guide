@@ -1,6 +1,6 @@
 ---
 title: "Design"
-description: "Keep code cheap to change: keep it simple, build only what has a use, abstract late, and prefer immutable values."
+description: "Keep code cheap to change: keep it simple, build only what has a use, abstract late, prefer immutable values, and comment only the surprises."
 sidebar:
   order: 0
   label: "Overview"
@@ -16,6 +16,7 @@ everything in this chapter is about keeping that cheap.
 2. [Build only what has a use](./build-only-what-has-a-use/)
 3. [Don't abstract early](./dont-abstract-early/)
 4. [Prefer immutability](./prefer-immutability/)
+5. [Comment the surprises](./comments/)
 
-The first is the principle. The other three are the places I most often
-see it broken.
+The first is the principle. The rest are the places I most often see it
+broken.
