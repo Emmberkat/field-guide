@@ -1,6 +1,6 @@
 ---
 title: "Reviewing code"
-description: "Assume the change is wrong and work to disprove it, back your instincts with evidence, stay kind to the author, and turn repeated comments into checks."
+description: "Assume the change is wrong and work to disprove it, back your instincts with evidence, stay kind to the author, leave formatting to a formatter, and turn repeated comments into checks."
 sidebar:
   order: 2
 ---
@@ -100,6 +100,39 @@ the change to be right.
 
 The same applies on the other side. When a reviewer finds problems in
 your change, the process is working.
+
+## Leave formatting to the formatter
+
+Use an auto formatter. It is not optional. Discussing formatting, in a
+review or anywhere else, is a waste of everyone's time, and formatting
+by hand is a waste of the author's.
+
+Pick one that is strict and opinionated, with as few settings as you can
+get away with: ruff format or Black for Python, google-java-format for
+Java, gofmt for Go, rustfmt for Rust. The value of a formatter is not
+that its choices are the best ones. It is that the choices are made
+once, and nobody has to make them again. Every option you configure is
+a question someone will eventually reopen. Everyone will dislike a few
+of its choices a little (developers are a notoriously opinionated
+bunch), and everyone will be better off anyway, because nobody ever has
+to talk about it again.
+
+Make it impossible to skip:
+
+- Format on save in the editor, so nobody formats anything by hand.
+- Check it in CI, so unformatted code cannot merge: `ruff format
+  --check`, `black --check`, or `google-java-format --dry-run
+  --set-exit-if-changed`. Each exits non-zero when a file would change.
+- Adopt it in a single commit that only reformats, with no other change
+  in it. Add that commit's hash to a `.git-blame-ignore-revs` file at the
+  root of the repository, so blame skips over it. GitHub's blame view
+  reads the file automatically; locally, run `git config
+  blame.ignoreRevsFile .git-blame-ignore-revs`.
+
+That is the [layering](#layer-them) described below: the editor catches
+it early, CI makes it reliable. And if a formatting comment ever shows
+up in a review, the formatter is missing or not enforced. Fix that, not
+the line.
 
 ## Repeated comments are a missing mechanism
 
