@@ -1,0 +1,298 @@
+---
+title: "Shaping code so it can be tested"
+description: "Let the test push back on the design, test the interface people use, and replace patching with design."
+sidebar:
+  order: 2
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+## Write the code and the test together
+
+Do not write the code first and the tests after. By then the design is
+settled, and the test can only document whatever shape the code happened
+to land in, awkward parts included. That is how you end up reaching for
+`patch`, or for a private function, or for twenty lines of setup to
+reach one branch.
+
+There should be a healthy back and forth between the code and the test.
+Write a first draft of a test early, against the interface you wish you
+had, and pay attention to what it tells you:
+
+- The setup is long. The code needs too much to get started, or knows
+  about too many things.
+- You want to patch something. A dependency is hidden inside the code
+  instead of passed in.
+- You want to call a private function. The behavior you care about is
+  not reachable through the interface, or it belongs in its own unit.
+- The assertion is hard to write. The code does not return anything
+  observable, or it returns too much at once.
+- The test name needs "and". The function does two things, so it wants
+  to be two tests, and maybe two functions.
+
+Then change the code, not the test. A good test author uses what the
+first draft of a test taught them to write better code, and the test
+gets simpler as a result. The test is the first caller of the code. If
+it is hard to call from a test, it will be hard to call from everywhere
+else too. The next two sections are what that looks like in practice.
+
+This does not require strict test-first. It requires that the test gets
+a vote on the design while the design can still change.
+
+## Test the interface people actually use
+
+In general, test the public interface: the one real callers use.
+Internals move. The contract is what you promised. A test bound to a
+private function will break during a refactor that changed no behavior,
+and you will fix the test by rewriting it to match the new internals,
+which means it was never protecting anything.
+
+```python
+# Don't do this.
+from myhttp.request import _parse_header
+
+
+def test_parse_header_splits_on_colon() -> None:
+    assert _parse_header("Host: example.com") == ("Host", "example.com")
+```
+
+```python
+def test_request_exposes_host_header() -> None:
+    request = parse_request(b"GET / HTTP/1.1\r\nHost: example.com\r\n\r\n")
+    assert request.headers["Host"] == "example.com"
+```
+
+The second test survives any rewrite of the header parsing that keeps
+requests working, and it fails for any rewrite that breaks them. The
+first does the opposite on both counts.
+
+Testing a private function means the code design is wrong. So does
+making a private function public, protected, package-visible, or
+"internal but exported for tests" just so a test can call it. Loosening
+visibility for a test does not fix the design. It hides the problem and
+adds an API surface nobody meant to support.
+
+If the only way to reach the logic is through a private function, either
+the behavior wants to be observed through the API that already exposes
+it, or the logic is really a separate unit with its own contract and
+wants to be extracted into its own module, with a real public interface
+that real code calls. The check: would you make the same change if no
+test existed? If not, you are changing visibility, not design.
+
+Whatever you test through, assert on observable outcomes, not
+implementation details. What did the caller get back. What landed on
+disk. What went out on the wire. Not which internal method ran in what
+order.
+
+## Don't patch
+
+No `unittest.mock.patch` or `MagicMock` in Python; no Mockito `mock()`,
+`when()`, or `mockStatic()` in Java. Patching reaches inside the code
+under test and swaps a dependency without the code knowing. The test is
+now bound to an import path or a static factory and an internal call, and the
+dependency the code actually has is invisible from its signature. If the
+code cannot be tested without that, the code is the problem, and the fix
+is to make it testable rather than to simulate the world around it.
+
+Work down this ladder instead, and stop at the first rung that works.
+
+### 1. Use the real thing
+
+Prefer the real collaborator when it is simple and deterministic: a real
+frozen dataclass or record, a real dict or map, a real temp directory, a
+real SQLite file. Nothing to keep in sync, nothing to get wrong.
+
+### 2. Separate policy from mechanism
+
+Policy is the decisions: the branching, the transformation, the rules.
+Mechanism is how you get the data in and out: the API call, the file
+read, the socket. Tangled together, the only way to test the policy is
+to fake the mechanism. Pulled apart, the policy is a pure function you
+can test with static data.
+
+Say the behavior you care about is that a failed run's summary names the
+retry count. Reaching it through the client, which the code creates for
+itself, looks like this:
+
+<Tabs>
+<TabItem label="Python">
+
+```python
+# Don't do this.
+def test_summarize_run() -> None:
+    client = MagicMock()
+    client.describe_run.return_value = {"Status": "FAILED", "Retries": 3}
+
+    with patch("boto3.client", return_value=client):
+        assert summarize_run("r-1") == "FAILED after 3 retries"
+
+    assert client.describe_run.called
+```
+
+</TabItem>
+<TabItem label="Java">
+
+```java
+// Don't do this.
+@Test
+void summarizeRun() {
+    RunClient client = mock(RunClient.class);
+    when(client.describeRun("r-1")).thenReturn(new RunDescription("FAILED", 3));
+
+    try (MockedStatic<RunClients> clients = mockStatic(RunClients.class)) {
+        clients.when(RunClients::create).thenReturn(client);
+        assertEquals("FAILED after 3 retries", RunSummaries.summarizeRun("r-1"));
+    }
+
+    verify(client).describeRun("r-1");
+}
+```
+
+</TabItem>
+</Tabs>
+
+That canned response is what you believe the API returns, so the test
+passes whether or not that is true. The final called-it check
+(`assert client.describe_run.called`, `verify(client)`) asserts that the
+code you just read does what you just read. And the one
+assertion you care about is buried in scaffolding.
+
+Extract the policy and the test is just the assertion:
+
+<Tabs>
+<TabItem label="Python">
+
+```python
+def test_summary_names_retry_count() -> None:
+    assert summarize({"Status": "FAILED", "Retries": 3}) == "FAILED after 3 retries"
+```
+
+</TabItem>
+<TabItem label="Java">
+
+```java
+@Test
+void summaryNamesRetryCount() {
+    assertEquals("FAILED after 3 retries",
+            RunSummaries.summarize(new RunDescription("FAILED", 3)));
+}
+```
+
+</TabItem>
+</Tabs>
+
+No client, no patching, and the edge cases are now one line each: zero
+retries, a missing retry count, a status you do not recognize. The
+one-line fetch left on top has no logic of its own, so leave it to the
+integration layer, where it can fail honestly.
+
+### 3. Inject what is left
+
+Sometimes the policy genuinely needs to talk to a collaborator while it
+works: it fetches, decides, fetches again, retries, writes. You cannot
+pull all of that into one pure function. Here the fix is dependency
+injection: the code takes its collaborator as a parameter instead of
+constructing or importing it, and the test passes in a small
+hand-written stand-in through the front door. Type the parameter as a
+`Protocol` in Python or an interface in Java, describing only what the
+code uses, so the type checker verifies that both the real client and
+the stand-in satisfy it:
+
+<Tabs>
+<TabItem label="Python">
+
+```python
+class RunStore(Protocol):
+    def get_status(self, run_id: str) -> str: ...
+    def restart(self, run_id: str) -> None: ...
+
+
+def restart_failed(store: RunStore, run_ids: list[str]) -> list[str]:
+    restarted = [r for r in run_ids if store.get_status(r) == "FAILED"]
+    for run_id in restarted:
+        store.restart(run_id)
+    return restarted
+
+
+@dataclass
+class InMemoryRunStore:
+    statuses: dict[str, str]
+
+    def get_status(self, run_id: str) -> str:
+        return self.statuses[run_id]
+
+    def restart(self, run_id: str) -> None:
+        self.statuses[run_id] = "RUNNING"
+
+
+def test_only_failed_runs_are_restarted() -> None:
+    store = InMemoryRunStore({"a": "FAILED", "b": "SUCCEEDED", "c": "FAILED"})
+
+    assert restart_failed(store, ["a", "b", "c"]) == ["a", "c"]
+    assert store.statuses == {"a": "RUNNING", "b": "SUCCEEDED", "c": "RUNNING"}
+```
+
+</TabItem>
+<TabItem label="Java">
+
+```java
+interface RunStore {
+    String status(String runId);
+    void restart(String runId);
+}
+
+final class Restarter {
+    static List<String> restartFailed(RunStore store, List<String> runIds) {
+        List<String> restarted = runIds.stream()
+                .filter(id -> store.status(id).equals("FAILED"))
+                .toList();
+        restarted.forEach(store::restart);
+        return restarted;
+    }
+}
+
+final class InMemoryRunStore implements RunStore {
+    final Map<String, String> statuses;
+
+    InMemoryRunStore(Map<String, String> statuses) {
+        this.statuses = new HashMap<>(statuses);
+    }
+
+    @Override
+    public String status(String runId) {
+        return statuses.get(runId);
+    }
+
+    @Override
+    public void restart(String runId) {
+        statuses.put(runId, "RUNNING");
+    }
+}
+
+@Test
+void onlyFailedRunsAreRestarted() {
+    var store = new InMemoryRunStore(Map.of("a", "FAILED", "b", "SUCCEEDED", "c", "FAILED"));
+
+    assertEquals(List.of("a", "c"), Restarter.restartFailed(store, List.of("a", "b", "c")));
+    assertEquals(Map.of("a", "RUNNING", "b", "SUCCEEDED", "c", "RUNNING"), store.statuses);
+}
+```
+
+</TabItem>
+</Tabs>
+
+That is not a mock with better manners:
+
+- The dependency is in the signature, so a reader knows what the code
+  needs without reading its body, and a refactor that keeps the
+  interface keeps the test.
+- The stand-in is real code with real (if simple) behavior. You assert
+  on the state it ends in, not on which methods were called.
+- The type checker holds the stand-in to the `Protocol` or interface.
+  A `MagicMock` accepts any attribute and any call, so it keeps passing
+  after the real interface changes. A Mockito mock is at least
+  type-checked, but every call you did not stub quietly returns `null`,
+  `0`, or `false`, and the test carries on.
+- One stand-in serves every test of that collaborator. Keep it dumb. If
+  it grows logic of its own, it needs its own tests, or the real thing
+  is cheap enough to use instead.
