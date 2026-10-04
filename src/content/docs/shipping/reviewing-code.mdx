@@ -120,14 +120,11 @@ to talk about it again.
 Make it impossible to skip:
 
 - Format on save in the editor, so nobody formats anything by hand.
-- Check it in CI, so unformatted code cannot merge: `ruff format
-  --check`, `black --check`, or `google-java-format --dry-run
-  --set-exit-if-changed`. Each exits non-zero when a file would change.
+- Check it in CI, so unformatted code cannot merge: `ruff format --check`, `black --check`, or `google-java-format --dry-run --set-exit-if-changed`. Each exits non-zero when a file would change.
 - Adopt it in a single commit that only reformats, with no other change
   in it. Add that commit's hash to a `.git-blame-ignore-revs` file at the
   root of the repository, so blame skips over it. GitHub's blame view
-  reads the file automatically; locally, run `git config
-  blame.ignoreRevsFile .git-blame-ignore-revs`.
+  reads the file automatically; locally, run `git config blame.ignoreRevsFile .git-blame-ignore-revs`.
 
 That is the [layering](#layer-them) described below: the editor catches
 it early, CI makes it reliable. And if a formatting comment ever shows

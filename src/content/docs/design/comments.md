@@ -40,8 +40,7 @@ The function name says what the comment said, and unlike the comment, it
 cannot quietly go out of date: change what `can_edit` means and every
 caller changes with it. The same goes for a well-named variable, a
 constant instead of a magic number, or a type that makes the bad value
-impossible. And comments that narrate each step (`# loop over the
-orders`, `# return the total`) tell the reader nothing they could not
+impossible. And comments that narrate each step (`# loop over the orders`, `# return the total`) tell the reader nothing they could not
 see faster by reading the line underneath.
 
 ## Comment what is not obvious
@@ -91,8 +90,7 @@ The more often the norm is enforced, by a lint rule, a review comment,
 or a [guide like this
 one](../../shipping/reviewing-code/#repeated-comments-are-a-missing-mechanism),
 the more important the comment is. If a lint rule has to be suppressed
-for the line, the suppression is the place for it: `# noqa: TID251 --
-runs before the clock is configured`, not a bare `# noqa`.
+for the line, the suppression is the place for it: `# noqa: TID251 -- runs before the clock is configured`, not a bare `# noqa`.
 
 ## Documentation comments are different
 
@@ -104,8 +102,7 @@ body, and editors and documentation tools show them at the call site.
 Make them say what the signature cannot: what the function promises,
 what it does on bad input, what it raises or returns when things go
 wrong, units, and anything a caller has to know before calling it. A
-docstring that only restates the name and the parameter types (`"""Get
-the user."""` on `get_user(user_id: str) -> User`) is the same wasted
+docstring that only restates the name and the parameter types (`"""Get the user."""` on `get_user(user_id: str) -> User`) is the same wasted
 comment as any other.
 
 ## Delete commented-out code
