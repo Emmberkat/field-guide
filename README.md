@@ -46,6 +46,12 @@ of every `<TabItem>` tag, or MDX will not treat them as code blocks.
 Link between pages with relative links (`../shaping-code/`), not absolute
 ones, so the site keeps working if the base path changes.
 
+## Formatting
+
+Everything Prettier understands is formatted with it, prose included
+(`proseWrap: "always"` in `.prettierrc`; that is the only setting). Turn on
+format on save in your editor, or run `npm run format` before committing.
+
 ## With Nix (recommended)
 
 ```sh
@@ -65,6 +71,7 @@ npm ci
 npm run dev          # live preview at http://localhost:4321/field-guide/
 npm run build        # static site in ./dist
 npm run preview      # serve ./dist
+npm run format       # format everything with Prettier
 ```
 
 ## Deployment
