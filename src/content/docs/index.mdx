@@ -11,26 +11,25 @@ hero:
       icon: right-arrow
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import { Card, CardGrid } from "@astrojs/starlight/components";
 
-These are the opinions I bring to code review, written down so I can
-link to them instead of retyping them. They are not policy. They are a
-starting point to challenge, and a few of them exist because someone
-pushed back on me and was right.
+These are the opinions I bring to code review, written down so I can link to
+them instead of retyping them. They are not policy. They are a starting point to
+challenge, and a few of them exist because someone pushed back on me and was
+right.
 
 <CardGrid>
-	<Card title="Design" icon="puzzle">
-		Keep code cheap to change: keep it simple, build only what has a
-		use, abstract late, and prefer immutable values. [Read the
-		chapter](design/).
-	</Card>
-	<Card title="Testing" icon="approve-check">
-		What to test, how to shape code so it can be tested, and how to make
-		tests tell the truth. [Read the chapter](testing/).
-	</Card>
-	<Card title="Shipping changes" icon="rocket">
-		One complete, deployable change per commit, and how to review
-		changes so they get better instead of just approved. [Read the
-		chapter](shipping/one-change-per-commit/).
-	</Card>
+  <Card title="Design" icon="puzzle">
+    Keep code cheap to change: keep it simple, build only what has a use,
+    abstract late, and prefer immutable values. [Read the chapter](design/).
+  </Card>
+  <Card title="Testing" icon="approve-check">
+    What to test, how to shape code so it can be tested, and how to make tests
+    tell the truth. [Read the chapter](testing/).
+  </Card>
+  <Card title="Shipping changes" icon="rocket">
+    One complete, deployable change per commit, and how to review changes so
+    they get better instead of just approved. [Read the
+    chapter](shipping/one-change-per-commit/).
+  </Card>
 </CardGrid>
