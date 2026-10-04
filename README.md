@@ -14,13 +14,13 @@ src/content/docs/
     index.md           Chapter overview (optional)
 ```
 
-Each chapter is a directory under `src/content/docs/`, listed in the sidebar
-in `astro.config.mjs`. Pages within a chapter are ordered by `sidebar.order`
-in their frontmatter. Use `.md` for plain pages and `.mdx` for pages that need
+Each chapter is a directory under `src/content/docs/`, listed in the sidebar in
+`astro.config.mjs`. Pages within a chapter are ordered by `sidebar.order` in
+their frontmatter. Use `.md` for plain pages and `.mdx` for pages that need
 components, such as language tabs:
 
 ````mdx
-import { Tabs, TabItem } from '@astrojs/starlight/components';
+import { Tabs, TabItem } from "@astrojs/starlight/components";
 
 <Tabs>
 <TabItem label="Python">
@@ -40,11 +40,11 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 </Tabs>
 ````
 
-Keep the code fences at the start of the line, with a blank line on each side
-of every `<TabItem>` tag, or MDX will not treat them as code blocks.
+Keep the code fences at the start of the line, with a blank line on each side of
+every `<TabItem>` tag, or MDX will not treat them as code blocks.
 
-Link between pages with relative links (`../shaping-code/`), not absolute
-ones, so the site keeps working if the base path changes.
+Link between pages with relative links (`../shaping-code/`), not absolute ones,
+so the site keeps working if the base path changes.
 
 ## Formatting
 
