@@ -50,7 +50,15 @@ so the site keeps working if the base path changes.
 
 Everything Prettier understands is formatted with it, prose included
 (`proseWrap: "always"` in `.prettierrc`; that is the only setting). Turn on
-format on save in your editor, or run `npm run format` before committing.
+format on save in your editor, or run `npm run format` before committing. CI
+runs `npm run format:check` and fails on unformatted files.
+
+Commits that only reformat are listed in `.git-blame-ignore-revs`, which
+GitHub's blame view skips automatically. To skip them locally too:
+
+```sh
+git config blame.ignoreRevsFile .git-blame-ignore-revs
+```
 
 ## With Nix (recommended)
 
