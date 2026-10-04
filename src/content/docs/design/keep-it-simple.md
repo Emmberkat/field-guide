@@ -1,6 +1,6 @@
 ---
 title: "Keep it simple"
-description: "Fewer moving parts, fewer states, fewer concepts. Reach for the boring option first."
+description: "Fewer moving parts, fewer states, fewer concepts. Reach for the boring option first, and aim for boring code."
 sidebar:
   order: 1
 ---
@@ -96,6 +96,19 @@ More lines, and much simpler. There are four states and all of them are
 valid. A finished download without a path cannot exist, the `match`
 reads like the state diagram, and the type checker complains if a new
 state is added and `describe` does not handle it.
+
+## Boring is a compliment
+
+Great code is often boring code. It is simple, and it works. There is
+nothing in it to admire, because everything in it is obvious: the names
+say what things are, each function does what its name says, and the
+control flow goes where you expect. Reading it, you think "well, of
+course", and that is the best reaction code can get. Code that is
+exciting to read is exciting because it surprises people, and surprises
+are what bugs are made of.
+
+The same goes for the change that introduces it. If the review of your
+change is quick and dull, that is usually a sign it was done well.
 
 ## Cleverness is a cost
 
