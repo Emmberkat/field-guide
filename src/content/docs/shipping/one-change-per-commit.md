@@ -24,7 +24,9 @@ whatever you had at 5pm is a log.
   that stretch of history.
 - Review stays focused. A reviewer can hold one change in their head.
   Mix three, and they will review the most obvious one carefully and
-  skim the other two, which is exactly where the bug will be.
+  skim the other two, which is exactly where the bug will be. And no
+  reviewer can give a quality review of a massive commit, however
+  careful they are. More in [Reviewing code](../reviewing-code/).
 - Any commit can ship. If every commit is safe to deploy, nobody has to
   ask whether the one about to go out is in the middle of something.
 - The history explains itself. A year from now, `git blame` on a line
