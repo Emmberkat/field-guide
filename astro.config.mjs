@@ -27,6 +27,10 @@ export default defineConfig({
 					label: 'Testing',
 					items: [{ autogenerate: { directory: 'testing' } }],
 				},
+				{
+					label: 'Shipping changes',
+					items: [{ autogenerate: { directory: 'shipping' } }],
+				},
 			],
 		}),
 	],
