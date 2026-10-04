@@ -1,16 +1,18 @@
 ---
 title: "Design"
-description: "Keep code cheap to change: keep it simple, build only what has a use, abstract late, prefer immutable values, and comment only the surprises."
+description:
+  "Keep code cheap to change: keep it simple, build only what has a use,
+  abstract late, prefer immutable values, and comment only the surprises."
 sidebar:
   order: 0
   label: "Overview"
 ---
 
-Most code that is painful to work with is not wrong. It is harder to
-change than it needs to be: more moving parts than the problem has,
-features nobody uses, abstractions shaped around guesses, and state that
-can change behind your back. Changing code is most of what we do, so
-everything in this chapter is about keeping that cheap.
+Most code that is painful to work with is not wrong. It is harder to change than
+it needs to be: more moving parts than the problem has, features nobody uses,
+abstractions shaped around guesses, and state that can change behind your back.
+Changing code is most of what we do, so everything in this chapter is about
+keeping that cheap.
 
 1. [Keep it simple](./keep-it-simple/)
 2. [Build only what has a use](./build-only-what-has-a-use/)
@@ -18,5 +20,4 @@ everything in this chapter is about keeping that cheap.
 4. [Prefer immutability](./prefer-immutability/)
 5. [Comment the surprises](./comments/)
 
-The first is the principle. The rest are the places I most often see it
-broken.
+The first is the principle. The rest are the places I most often see it broken.
