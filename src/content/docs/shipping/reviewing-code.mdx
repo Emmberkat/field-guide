@@ -1,0 +1,198 @@
+---
+title: "Reviewing code"
+description: "Assume the change is wrong and work to disprove it, back your instincts with evidence, stay kind to the author, and turn repeated comments into checks."
+sidebar:
+  order: 2
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+Code review exists to improve quality: to catch the problems the author
+could not see, before they ship. It is also one of the best teaching
+tools a team has, because it is where standards get explained on real
+code, one change at a time. Both only work if the reviewer actually goes
+looking for problems.
+
+## Small changes are reviewable changes
+
+No reviewer can give a quality review of a massive commit, however
+careful they are. Attention runs out long before a two-thousand-line
+diff does. Past a few hundred lines, review turns into skimming, and the
+bigger the change, the more likely it is to be approved with "looks
+good" because nobody could hold all of it in their head at once.
+
+This is one of the strongest reasons for [small, targeted, incremental
+commits](../one-change-per-commit/). A change that does one thing can be
+checked thoroughly. As a reviewer, asking for a large change to be split
+up is a legitimate review comment, not an obstacle. You cannot review
+what you cannot read.
+
+## Assume the code is wrong
+
+Review hostilely. Go into every review assuming the change is broken,
+and work to prove yourself wrong. Approve when you have tried to break
+it and failed, not when you have read it and nothing jumped out.
+
+The direction matters. A reviewer who starts from "this is probably
+fine" reads to confirm it, and finds what they expect. A reviewer who
+starts from "something in here is wrong" reads to find it, and checks
+the parts everyone else skims:
+
+- What input breaks it? Empty, huge, malformed, duplicated, concurrent,
+  unicode, negative.
+- What happens on the failure path? Most code is written for the success
+  path, and most incidents happen on the other one.
+- What do the callers of the changed code assume, and does that still
+  hold?
+- Would the tests fail if the code were wrong? A test that [cannot
+  fail](../../testing/telling-the-truth/) is a test you should not
+  count.
+- What is missing? The hardest bugs to see in a diff are the lines that
+  are not there: the unhandled case, the missing migration, the caller
+  that was not updated.
+
+## Trust your gut, then prove it
+
+When something feels off, trust that. Experience shows up as a vague
+unease long before you can say what is wrong, and that unease is usually
+pointing at something real.
+
+That does not mean leaving a comment that says it feels wrong. It means
+doing the research: read the code it calls, check the documentation,
+look at the history with `git blame`, run it, or write a quick test that
+tries to break it. Then either you have proof and a much better comment,
+or you have disproved it and learned something about the code. Both are
+good outcomes. The only bad one is ignoring the feeling, or posting it
+as a vague comment the author then has to investigate for you.
+
+> This looks racy.
+
+> Two requests for the same email can both pass the `exists` check
+> before either one inserts. I reproduced it with two concurrent calls
+> in a test (below). A unique index on `email` would make the second
+> insert fail cleanly instead of creating a duplicate account.
+
+The first comment hands the author a job. The second hands them the
+answer, and anyone reading it learns how to spot the next one. If you
+dug in and still could not settle it, say what you checked and ask the
+question. That is honest, and it is still far more useful than "this
+seems off".
+
+## Be hostile to the code, not the author
+
+Reviewing hostilely does not mean being an ass. The hostility is aimed
+at the code, and the person is on the same side as you: you both want
+the change to be right.
+
+- Talk about the code, not the person. "This loop reads the whole file
+  into memory" rather than "you read the whole file into memory".
+- Explain why. A comment that only says what to change fixes one line. A
+  comment that says why teaches the author to get it right next time
+  without you, which is how a team's standards actually spread.
+- Link to the reasoning. If the point is written down somewhere, in a
+  guide, a design doc, or a page like this one, link it instead of
+  retyping it.
+- Say how much it matters. Mark the comments that block the change and
+  the ones that do not ("nit:", "optional:"). Otherwise the author has
+  to treat every comment as blocking.
+- Say what is good, when it is. Not as padding, but because a clear test
+  or a clean refactor is worth reinforcing.
+
+The same applies on the other side. When a reviewer finds problems in
+your change, the process is working.
+
+## Repeated comments are a missing mechanism
+
+If you find yourself leaving the same comment over and over, especially
+across several engineers, the problem is not those engineers. Something
+in the codebase, the tests, the lint configuration, or the documentation
+is failing to steer people toward the right thing, and review is
+catching it by hand, every time.
+
+Review is the least reliable way to enforce anything. It depends on the
+reviewer noticing, on every change, forever, and on the reviewer being
+the person who knows the rule. Every time you leave the same comment
+twice, look for a more durable place to put it. Prefer the most reliable
+option you can get:
+
+1. Make the wrong thing impossible: a type that cannot hold the bad
+   value, an API that does not offer the dangerous option. The same idea
+   as [making it impossible before you make it
+   tested](../../testing/deciding-what-to-test/#make-it-impossible-before-you-make-it-tested).
+2. Fail the build: a lint rule, a type check, a test, an architecture
+   test.
+3. Catch it early but softly: an editor hint, a pre-commit hook, a
+   template or scaffold that starts people in the right place.
+4. Write it down: documentation people can find and link to, a docstring
+   at the point of use, an error message that explains the fix.
+5. The review comment. The fallback when nothing above is possible yet.
+
+A lint rule that forces the right behavior beats a documentation change,
+because the lint rule cannot be skipped and does not depend on anyone
+having read anything. Say reviews keep catching code that reads the
+system clock directly instead of taking an injected clock, which makes
+it untestable:
+
+<Tabs>
+<TabItem label="Python">
+
+```toml
+# pyproject.toml
+[tool.ruff.lint]
+extend-select = ["TID251"]
+
+[tool.ruff.lint.flake8-tidy-imports.banned-api]
+"datetime.datetime.now".msg = "Take a Clock so tests control time. See docs/time.md."
+
+[tool.ruff.lint.per-file-ignores]
+"src/app/clock.py" = ["TID251"]  # the one place allowed to read the real time
+```
+
+</TabItem>
+<TabItem label="Java">
+
+```java
+@Test
+void timeComesFromAnInjectedClock() {
+    noClasses()
+            .should().callMethod(Instant.class, "now")
+            .because("code should take a java.time.Clock so tests control time; see docs/time.md")
+            .check(new ClassFileImporter().importPackages("com.example.app"));
+}
+```
+
+This is an [ArchUnit](https://www.archunit.org/) test. It bans only the
+no-argument `Instant.now()`, so `Instant.now(clock)` stays allowed.
+
+</TabItem>
+</Tabs>
+
+Now the comment never needs to be written again, and the person who
+would have received it finds out in seconds instead of a day later.
+
+### Layer them
+
+You can, and often should, do more than one. Layering makes sense in two
+situations:
+
+- The durable check comes late. If the only reliable check is an
+  end-to-end test that runs after merge, or a CI job that takes half an
+  hour, add a faster, softer layer in front of it (an editor rule, a
+  pre-commit hook, a line in the docs) so most people find out while
+  they are still writing the code. The late check catches whoever slips
+  through.
+- The mechanisms complement each other. A lint rule says what is wrong.
+  Documentation says why, and what to do instead. Put a link to the
+  documentation in the lint message, as both examples above do, and each
+  one covers what the other cannot.
+
+### Let it inform your abstractions
+
+Repeated comments are also evidence about your abstractions. If reviews
+keep saying "there is already a helper for this" or keep catching the
+same five lines reimplemented slightly differently, you now have the
+several real call sites that [tell you what the abstraction should
+be](../../design/dont-abstract-early/). If reviews keep catching the
+same misuse of an existing abstraction, it is probably the wrong shape:
+it makes the wrong thing easy. Reshape it, or remove it, so the mistake
+stops being possible.
