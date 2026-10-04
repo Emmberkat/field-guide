@@ -62,11 +62,53 @@ code that is half-written, or written and waiting for a caller that has
 not arrived yet. That second kind is just [speculative
 code](../../design/build-only-what-has-a-use/) with extra steps.
 
+That sequence is for replacing something, where the old code gives you
+callers to move over. A brand-new feature has no caller except its
+users, so the first slice has to be something a user can actually use:
+a landing page, one endpoint, one step of a flow, the narrowest version
+that works end to end. It does not need to be feature complete, but it
+has to work, build, and pass its tests, and then each later commit adds
+to something that already runs. What it must never be is code that sits
+completely dead on `main`, waiting for the rest of the feature to arrive
+before anything can reach it.
+
 Tests go in the same commit as the code they test. Code without its
 tests is not a complete change, and a separate "add tests" commit
 afterwards means the commit before it shipped untested. The [testing
 chapter](../../testing/shaping-code/#write-the-code-and-the-test-together)
 has more on writing them together.
+
+## Feature flags are for rollout, not for hiding unfinished code
+
+A flag that controls who can see a feature is fine. Turn it on for an
+internal alpha deployment, for staff, or for a few percent of customers,
+and leave it off for everyone else. The code behind it is still live: it
+runs, people use it, and you find out whether it works. It is dead to
+external customers, not dead in the code.
+
+A flag that hides code nobody can reach is the thing to avoid. If the
+flag is off everywhere, so nothing exercises the new path except, maybe,
+a test that turns the flag on, the feature is not being built
+incrementally. It is being built on a branch that happens to live on
+`main`. And every flag doubles the paths through the code it guards:
+the on path and the off path both have to be tested, kept working, and
+understood, where without the flag there would be one. A few of those
+interacting and nobody knows which combinations actually run in
+production.
+
+So keep flags few and short-lived:
+
+- Ship the first usable slice behind a rollout flag, to an audience that
+  will actually use it, and grow it from there.
+- Turn it on for more people as it earns trust, not when it is
+  "finished".
+- Delete the flag as soon as the feature is on for everyone, so there is
+  one code path again. Deleting it is part of shipping the feature, not
+  cleanup for later.
+
+How thin the first slice can be, and who it goes to, depends on the
+feature. That is a judgment call every time. The part that does not
+change is that it runs somewhere real.
 
 ## One commit per pull request
 
