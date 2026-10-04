@@ -116,7 +116,7 @@ Code is read far more often than it is written, usually by someone in a
 hurry who did not write it. A clever one-liner saves its author a minute
 and costs every reader five. If a piece of code needs a comment to
 explain how it works, try writing the version that would not need one.
-Save comments for why.
+[Save comments for why](../comments/).
 
 Simple code is also the code that is easy to test. When the [first draft
 of a
