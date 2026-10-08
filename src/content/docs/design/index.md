@@ -2,7 +2,8 @@
 title: "Design"
 description:
   "Keep code cheap to change: keep it simple, build only what has a use,
-  abstract late, prefer immutable values, and comment only the surprises."
+  abstract late, prefer immutable values, comment only the surprises, and
+  contain your dependencies."
 sidebar:
   order: 0
   label: "Overview"
@@ -19,5 +20,6 @@ keeping that cheap.
 3. [Don't abstract early](./dont-abstract-early/)
 4. [Prefer immutability](./prefer-immutability/)
 5. [Comment the surprises](./comments/)
+6. [Contain your dependencies](./contain-dependencies/)
 
 The first is the principle. The rest are the places I most often see it broken.
