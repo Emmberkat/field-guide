@@ -66,7 +66,9 @@ Code that looks the same is not always the same, either. Two validation
 functions with identical bodies today, one for invoices and one for user
 profiles, change for different reasons and on different schedules. Merging them
 couples two things that have nothing to do with each other, and the first time
-one of them needs to change, you add a flag.
+one of them needs to change, you add a flag. A `utils` module is the same
+mistake at the file level: things that look shared, kept together for no better
+reason, under [a name that admits it](../naming/).
 
 ## Getting out of a wrong abstraction
 
