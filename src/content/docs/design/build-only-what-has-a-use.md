@@ -53,7 +53,8 @@ Thinking ahead there means leaving room, not building the future. Put a version
 in the URL or the message. Use an opaque ID as the primary key instead of an
 email address. Give an event a `type` field even though there is only one type
 today. Each of those costs almost nothing now and makes the future change cheap.
-None of them is a feature.
+None of them is a feature. Keeping a library
+[inside the module that uses it](../contain-dependencies/) is another.
 
 Everything else, which is most code, is a door you can walk back through. Build
 the smallest thing that does the job, and change it when the job changes.
