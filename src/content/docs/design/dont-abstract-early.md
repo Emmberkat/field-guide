@@ -85,3 +85,6 @@ as a `Protocol` or an interface. That is not an early abstraction. It has two
 implementations from the day it is written, the real one and the test stand-in,
 and it describes only the methods its caller actually uses. What I am arguing
 against is the abstraction built for callers that do not exist yet.
+
+Once the real variations exist, build them from small parts passed in rather
+than a class hierarchy: see [Compose, don't inherit](../composition/).

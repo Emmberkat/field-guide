@@ -3,7 +3,8 @@ title: "Design"
 description:
   "Keep code cheap to change: keep it simple, build only what has a use,
   abstract late, prefer immutable values, comment only the surprises, contain
-  your dependencies, and name things for what they are."
+  your dependencies, name things for what they are, and compose instead of
+  inheriting."
 sidebar:
   order: 0
   label: "Overview"
@@ -22,5 +23,6 @@ keeping that cheap.
 5. [Comment the surprises](./comments/)
 6. [Contain your dependencies](./contain-dependencies/)
 7. [Name things for what they are](./naming/)
+8. [Compose, don't inherit](./composition/)
 
 The first is the principle. The rest are the places I most often see it broken.

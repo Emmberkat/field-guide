@@ -1,0 +1,171 @@
+---
+title: "Compose, don't inherit"
+description:
+  "Build behavior from small parts passed in, not from a class hierarchy, and
+  keep interfaces thin and about behavior."
+sidebar:
+  order: 8
+---
+
+import { Tabs, TabItem } from "@astrojs/starlight/components";
+
+Inheritance is the tightest coupling a language offers. A subclass depends on
+everything its parent does, including the parts it never asked for and the parts
+the parent will change next year. I regret it nearly every time I reach for it.
+
+The usual way in is reasonable. Exports render rows and deliver them somewhere,
+so there is an `Exporter` base class with a `render` and a `deliver` step, and
+each export is a subclass:
+
+<Tabs>
+<TabItem label="Python">
+
+```python
+# Don't do this.
+class Exporter:
+    def export(self, rows: list[Row]) -> None:
+        self.deliver(self.render(rows))
+
+    def render(self, rows: list[Row]) -> bytes:
+        raise NotImplementedError
+
+    def deliver(self, data: bytes) -> None:
+        raise NotImplementedError
+
+
+class CsvExporter(Exporter):
+    def render(self, rows: list[Row]) -> bytes:
+        out = io.StringIO()
+        csv.writer(out).writerows(rows)
+        return out.getvalue().encode()
+
+
+class EmailCsvExporter(CsvExporter):
+    def deliver(self, data: bytes) -> None:
+        send_email("reports@example.com", data)
+```
+
+</TabItem>
+<TabItem label="Java">
+
+```java
+// Don't do this.
+abstract class Exporter {
+    void export(List<Row> rows) {
+        deliver(render(rows));
+    }
+
+    abstract byte[] render(List<Row> rows);
+
+    abstract void deliver(byte[] data);
+}
+
+abstract class CsvExporter extends Exporter {
+    @Override
+    byte[] render(List<Row> rows) {
+        return Formats.toCsv(rows);
+    }
+}
+
+final class EmailCsvExporter extends CsvExporter {
+    @Override
+    void deliver(byte[] data) {
+        Mail.send("reports@example.com", data);
+    }
+}
+```
+
+</TabItem>
+</Tabs>
+
+Then someone needs JSON by email. That is `JsonExporter` plus
+`EmailJsonExporter`, with the email delivery written a second time, because a
+class has one parent and the email code lives under the CSV branch. Add a bucket
+as a destination and you have a class for every format times every destination.
+Format and destination are independent choices, and the hierarchy forces you to
+pick one of them as the parent. Meanwhile every subclass depends on the exact
+order in which `Exporter.export` calls its steps, so nobody can change the base
+class without reading all of them.
+
+## Build it from parts
+
+Pass the parts in instead:
+
+<Tabs>
+<TabItem label="Python">
+
+```python
+class Sink(Protocol):
+    def write(self, data: bytes) -> None: ...
+
+
+def export(rows: list[Row], render: Callable[[list[Row]], bytes], sink: Sink) -> None:
+    sink.write(render(rows))
+
+
+@dataclass
+class EmailSink:
+    to: str
+
+    def write(self, data: bytes) -> None:
+        send_email(self.to, data)
+
+
+export(rows, to_csv, EmailSink("reports@example.com"))
+export(rows, to_json, EmailSink("reports@example.com"))
+```
+
+</TabItem>
+<TabItem label="Java">
+
+```java
+interface Sink {
+    void write(byte[] data);
+}
+
+final class Exports {
+    static void export(List<Row> rows, Function<List<Row>, byte[]> render, Sink sink) {
+        sink.write(render.apply(rows));
+    }
+}
+
+record EmailSink(String to) implements Sink {
+    @Override
+    public void write(byte[] data) {
+        Mail.send(to, data);
+    }
+}
+
+Exports.export(rows, Formats::toCsv, new EmailSink("reports@example.com"));
+Exports.export(rows, Formats::toJson, new EmailSink("reports@example.com"));
+```
+
+</TabItem>
+</Tabs>
+
+Each format is a function and each destination is a small object, and any format
+goes with any destination. Adding one means writing one thing, not one per
+combination. Nothing depends on a parent's internals, because there is no
+parent. In Python, `EmailSink` does not even name `Sink`: the type checker
+accepts it because it has a matching `write`, and rejects a sink whose `write`
+takes the wrong type. In Java, a one-method interface also takes a lambda or a
+method reference, so a test can pass `written::add` as the sink.
+
+This is not an argument for building every function out of plug-in parts. The
+two parameters exist because there are already two formats and two destinations.
+With one of each, `export` would just render CSV and send the email.
+[Don't abstract early](../dont-abstract-early/) still applies: composition is
+the shape to reach for once you have real variations, instead of a hierarchy.
+
+## Keep interfaces thin and about behavior
+
+An interface should describe what something can do, and as little of it as the
+caller needs. `Sink` has one method, which is why anything can be a sink: a
+mailer, a bucket, a list in a test. An interface with ten methods has one real
+implementation and a test double nobody wants to write.
+
+Keep data out of interfaces. Once an interface starts declaring fields and
+properties, it is describing a particular shape of object, not a behavior, and
+every implementation has to carry that shape whether it makes sense for it or
+not. A plain data type, such as a record or a frozen dataclass, plus functions
+that take it, is usually what was meant.
