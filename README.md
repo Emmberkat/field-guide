@@ -13,6 +13,16 @@ every rule with the path of its page, and every page's Markdown sits beside it
 when it needs the detail. The paths are relative, so a copy of the folder works
 offline. It is generated in `src/pages/agents/`.
 
+The same folder is attached to the rolling
+[`latest` release](https://github.com/Emmberkat/field-guide/releases/tag/latest)
+as `field-guide-agents.zip`, replaced on every push to `main`, and built by the
+flake as `packages.<system>.agents`:
+
+```nix
+inputs.field-guide.url = "github:Emmberkat/field-guide";
+# ${inputs.field-guide.packages.${system}.agents}/AGENTS.md
+```
+
 ## Layout
 
 ```

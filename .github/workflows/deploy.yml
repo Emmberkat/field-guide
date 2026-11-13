@@ -32,6 +32,11 @@ jobs:
         uses: actions/upload-pages-artifact@v5
         with:
           path: dist
+      - if: github.event_name != 'pull_request'
+        uses: actions/upload-artifact@v5
+        with:
+          name: agents
+          path: dist/agents
 
   # Proves the flake still builds the same site.
   nix:
@@ -54,3 +59,29 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v5
+
+  # Replaces the files of the rolling "latest" release with this build's
+  # Markdown for agents, the same folder the site serves under /agents/.
+  release:
+    if: github.event_name != 'pull_request'
+    needs: [build, nix]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v5
+        with:
+          name: agents
+          path: agents
+      - run: zip -r field-guide-agents.zip agents
+      - env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          gh release view latest >/dev/null 2>&1 ||
+            gh release create latest --title "Latest" --target "$GITHUB_SHA" \
+              --notes "The guide for agents, rebuilt from main on every push."
+          git_ref="refs/tags/latest"
+          gh api --method PATCH "repos/$GH_REPO/git/$git_ref" -f sha="$GITHUB_SHA" -F force=true ||
+            gh api --method POST "repos/$GH_REPO/git/refs" -f ref="$git_ref" -f sha="$GITHUB_SHA"
+          gh release upload latest field-guide-agents.zip --clobber
