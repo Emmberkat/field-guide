@@ -9,7 +9,7 @@ sidebar:
 
 If I find myself leaving one of these on the same codebase again and again, the
 comment is not the fix. A lint rule or a test is; see
-[repeated comments are a missing mechanism](../../shipping/reviewing-code/#repeated-comments-are-a-missing-mechanism).
+[repeated comments are a missing mechanism](../shipping/reviewing-code.mdx#repeated-comments-are-a-missing-mechanism).
 
 Deciding what to test:
 

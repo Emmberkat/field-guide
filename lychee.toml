@@ -1,0 +1,14 @@
+# Used by `npm run check:links`, which checks the Markdown in
+# src/content/docs/ and the built site in dist/.
+
+# Only links within the guide. Links to other sites are not checked.
+offline = true
+# A link to a heading has to find that heading.
+include_fragments = "full"
+no_progress = true
+# The built site has a directory per page. In the Markdown, this makes a
+# link to a directory fail, so links have to name the page's file.
+index_files = ["index.html"]
+# Pages link to /field-guide/..., the site's base path, which is the root of
+# dist/.
+remap = ["file://(.*)/dist/field-guide(/|$) file://$1/dist/"]

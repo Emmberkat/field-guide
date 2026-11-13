@@ -39,7 +39,7 @@ open, and fields that exist only because the table has them. Return your own
 types.
 
 This is the cheapest way I know to
-[leave a door open](../build-only-what-has-a-use/#leave-the-door-open-dont-walk-through-it).
+[leave a door open](build-only-what-has-a-use.md#leave-the-door-open-dont-walk-through-it).
 You do not build the second database backend. You just make sure that the day
 you need one, it is one module's problem.
 
@@ -106,5 +106,5 @@ either way, and `UserRow` never leaves the module.
 
 Sometimes the tool cannot express what you need: a conflict clause, a collation,
 a query the planner only gets right by hand. Drop to raw SQL for that one query,
-on purpose, and [say why](../comments/#comment-where-you-break-the-norm). That
-is different from never having picked the tool up.
+on purpose, and [say why](comments.md#comment-where-you-break-the-norm). That is
+different from never having picked the tool up.

@@ -16,11 +16,11 @@ done. A strong model with the wrong context will confidently do the wrong thing.
 The other half is who is in charge. Whatever your skill level, you are. The
 agent is a worker you hand tasks to, never the expert you defer to.
 
-1. [Context is king](./context-is-king/): where context lives, and why it should
+1. [Context is king](context-is-king.md): where context lives, and why it should
    be shared.
-2. [You are in charge](./you-are-in-charge/): delegate like a manager, review
+2. [You are in charge](you-are-in-charge.md): delegate like a manager, review
    like a reviewer, and verify what it tells you.
-3. [Automation first, AI review second](./automation-first/): hard rules belong
+3. [Automation first, AI review second](automation-first.md): hard rules belong
    in compilers, linters, and tests. AI review is an advisor on top.
-4. [Prototype, then throw it away](./prototype-then-throw-away/): the first pass
+4. [Prototype, then throw it away](prototype-then-throw-away.md): the first pass
    is for learning, and LLMs make it cheap.

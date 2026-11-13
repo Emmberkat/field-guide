@@ -15,12 +15,12 @@ abstractions shaped around guesses, and state that can change behind your back.
 Changing code is most of what we do, so everything in this chapter is about
 keeping that cheap.
 
-1. [Keep it simple](./keep-it-simple/)
-2. [Build only what has a use](./build-only-what-has-a-use/)
-3. [Don't abstract early](./dont-abstract-early/)
-4. [Prefer immutability](./prefer-immutability/)
-5. [Comment the surprises](./comments/)
-6. [Contain your dependencies](./contain-dependencies/)
-7. [Name things for what they are](./naming/)
+1. [Keep it simple](keep-it-simple.md)
+2. [Build only what has a use](build-only-what-has-a-use.md)
+3. [Don't abstract early](dont-abstract-early.md)
+4. [Prefer immutability](prefer-immutability.mdx)
+5. [Comment the surprises](comments.md)
+6. [Contain your dependencies](contain-dependencies.md)
+7. [Name things for what they are](naming.md)
 
 The first is the principle. The rest are the places I most often see it broken.

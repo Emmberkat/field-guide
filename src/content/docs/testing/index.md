@@ -17,13 +17,13 @@ positions exist because someone pushed back on me and was right.
 
 The first four pages are the philosophy, in the order you meet it:
 
-1. [Deciding what to test](./deciding-what-to-test/)
-2. [Shaping code so it can be tested](./shaping-code/)
-3. [Making tests tell the truth](./telling-the-truth/)
-4. [Making failures useful](./useful-failures/)
+1. [Deciding what to test](deciding-what-to-test.md)
+2. [Shaping code so it can be tested](shaping-code.mdx)
+3. [Making tests tell the truth](telling-the-truth.md)
+4. [Making failures useful](useful-failures.md)
 
-After that come [rules for each flavor of test](./by-flavor/) and the
-[smells I comment on in review](./review-smells/).
+After that come [rules for each flavor of test](by-flavor.md) and the
+[smells I comment on in review](review-smells.md).
 
 ## The short version
 
