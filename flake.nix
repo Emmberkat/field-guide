@@ -66,10 +66,12 @@
           meta.description = "Emma's Field Guide, built as a static site";
         };
 
-        # The guide for agents: AGENTS.md and every page's Markdown, the same
-        # folder the site serves under /agents/ and the "latest" release holds.
-        agents = pkgs.runCommandLocal "field-guide-agents" { } ''
-          cp -r ${self.packages.${pkgs.stdenv.hostPlatform.system}.default}/agents $out
+        # The guide for agents as a skill, field-guide/: SKILL.md and every
+        # page's Markdown, the folder the site serves under /agents/ and the
+        # "latest" release holds. Point a skills directory setting at it.
+        skill = pkgs.runCommandLocal "field-guide-skill" { } ''
+          mkdir $out
+          cp -r ${self.packages.${pkgs.stdenv.hostPlatform.system}.default}/agents $out/field-guide
         '';
 
         # Serve the built site under its GitHub Pages base path.

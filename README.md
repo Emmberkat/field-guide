@@ -5,22 +5,25 @@ Software opinions, earned the hard way.
 Published at <https://emmberkat.github.io/field-guide/>. Built with
 [Starlight](https://starlight.astro.build/).
 
-For agents, the build also publishes the guide as Markdown under
+For agents, the build also publishes the guide as an agent skill under
 <https://emmberkat.github.io/field-guide/agents/>, apart from the web pages.
-[`AGENTS.md`](https://emmberkat.github.io/field-guide/agents/AGENTS.md) lists
+[`SKILL.md`](https://emmberkat.github.io/field-guide/agents/SKILL.md) lists
 every rule with the path of its page, and every page's Markdown sits beside it
 (`agents/design/naming.md`), so an agent reads the rules and opens a page only
 when it needs the detail. The paths are relative, so a copy of the folder works
 offline. It is generated in `src/pages/agents/`.
 
-The same folder is attached to the rolling
+The same folder, named `field-guide/`, is attached to the rolling
 [`latest` release](https://github.com/Emmberkat/field-guide/releases/tag/latest)
-as `field-guide-agents.zip`, replaced on every push to `main`, and built by the
-flake as `packages.<system>.agents`:
+as `field-guide-agents.zip`, replaced on every push to `main`. Unzip it into a
+skills directory, such as `~/.claude/skills/`. The flake builds it as
+`packages.<system>.skill`, a directory holding `field-guide/`, for a skills
+directory setting:
 
 ```nix
 inputs.field-guide.url = "github:Emmberkat/field-guide";
-# ${inputs.field-guide.packages.${system}.agents}/AGENTS.md
+# services.hermes-agent.settings.skills.external_dirs =
+#   [ "${inputs.field-guide.packages.${system}.skill}" ];
 ```
 
 ## Layout
