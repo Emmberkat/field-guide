@@ -61,7 +61,8 @@ jobs:
         uses: actions/deploy-pages@v5
 
   # Replaces the files of the rolling "latest" release with this build's
-  # Markdown for agents, the same folder the site serves under /agents/.
+  # skill for agents: the folder the site serves under /agents/, named
+  # field-guide/ after the skill.
   release:
     if: github.event_name != 'pull_request'
     needs: [build, nix]
@@ -72,8 +73,8 @@ jobs:
       - uses: actions/download-artifact@v5
         with:
           name: agents
-          path: agents
-      - run: zip -r field-guide-agents.zip agents
+          path: field-guide
+      - run: zip -r field-guide-agents.zip field-guide
       - env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}

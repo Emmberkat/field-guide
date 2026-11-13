@@ -1,6 +1,6 @@
 // Publishes every page's Markdown source, unchanged, under /agents/, apart
 // from the web pages: src/content/docs/design/naming.md is
-// /agents/design/naming.md. AGENTS.md links to these, and links between pages
+// /agents/design/naming.md. SKILL.md links to these, and links between pages
 // are paths to the other page's file, so they work here as they are. The home
 // page has no rules and is left out.
 
