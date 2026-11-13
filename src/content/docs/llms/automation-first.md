@@ -2,7 +2,7 @@
 title: "Automation first, AI review second"
 description:
   "Enforce hard rules with compilers, linters, and tests. Use AI review only as
-  an advisor, in addition to human review."
+  an advisor, in addition to human review, never as a blocker."
 sidebar:
   order: 3
 ---

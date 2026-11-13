@@ -1,8 +1,9 @@
 ---
 title: "Prototype, then throw it away"
 description:
-  "Write it once to learn, then rebuild it with what you learned. LLMs make the
-  first pass cheap."
+  "Write it once to learn, then rebuild it properly with what you learned. LLMs
+  make the first pass cheap, so actually throw it away: keep the notes, not the
+  code."
 sidebar:
   order: 4
 ---

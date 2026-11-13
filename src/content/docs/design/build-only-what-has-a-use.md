@@ -1,8 +1,10 @@
 ---
 title: "Build only what has a use"
 description:
-  "Don't build features, options, or extension points nobody needs yet. Think
-  hard about one-way doors, but build nothing speculative."
+  "Don't build features, options, or extension points nobody needs yet, and
+  delete code that has lost its use. Where a decision is expensive to reverse (a
+  public API, a wire format, a schema), leave the door open, but don't walk
+  through it."
 sidebar:
   order: 2
 ---

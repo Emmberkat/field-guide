@@ -1,8 +1,9 @@
 ---
 title: "Contain your dependencies"
 description:
-  "Keep a library inside the part of the code that uses it, and once you have
-  picked it, use it the way it was meant to be used."
+  "Keep a library inside the part of the code that uses it, and return your own
+  types from it. Once you have picked a tool, use it the way it was meant to be
+  used."
 sidebar:
   order: 6
 ---

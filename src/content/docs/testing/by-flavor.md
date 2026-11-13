@@ -1,8 +1,9 @@
 ---
 title: "Rules by flavor"
 description:
-  "Additions for unit, property-based, integration, end-to-end, BDD, and canary
-  tests."
+  "Unit, property-based, integration, end-to-end, BDD, and canary tests each
+  have rules of their own on top of the rest of the chapter. Read the section
+  for the kind of test you are writing or reviewing."
 sidebar:
   order: 5
 ---

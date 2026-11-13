@@ -1,8 +1,9 @@
 ---
 title: "Comment the surprises"
 description:
-  "No comment where the code already says it. Comments are for what is not
-  obvious and for where the code deliberately breaks the norm."
+  "The default is no comment: say it in code first. Comment what is not obvious
+  and where the code deliberately breaks the norm, and delete commented-out
+  code. Docstrings on public APIs are fine."
 sidebar:
   order: 5
 ---

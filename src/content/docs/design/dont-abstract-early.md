@@ -1,8 +1,9 @@
 ---
 title: "Don't abstract early"
 description:
-  "Duplicate first. Extract an abstraction once a few real call sites show what
-  is shared and what varies."
+  "Duplicate first, and extract an abstraction once a few real call sites show
+  what is shared and what varies. Duplication is cheaper than the wrong
+  abstraction."
 sidebar:
   order: 3
 ---

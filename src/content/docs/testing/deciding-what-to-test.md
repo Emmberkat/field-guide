@@ -1,8 +1,9 @@
 ---
 title: "Deciding what to test"
 description:
-  "Pick the failure mode first, then the cheapest layer that can see it, and
-  prefer making bad states impossible."
+  "Name the failure mode first, then test at the cheapest layer that can see it;
+  if nothing interesting could break, write nothing. Make a bad state impossible
+  before you test for it, and don't test the library."
 sidebar:
   order: 1
 ---
