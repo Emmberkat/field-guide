@@ -2,7 +2,9 @@
 title: "Keep it simple"
 description:
   "Fewer moving parts, fewer states, fewer concepts. Reach for the boring option
-  first, fold special cases into the general one, and aim for boring code."
+  first (nothing, then data, then a function, then a class, then a dependency),
+  fold special cases into the general one, and prefer boring code to clever
+  code."
 sidebar:
   order: 1
 ---

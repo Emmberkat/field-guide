@@ -2,7 +2,7 @@
 title: "Context is king"
 description:
   "Put context where it belongs (team, repo, or personal), share it, and write
-  it so both people and agents can read it."
+  it so both people and agents can read it. Keep AGENTS.md short and link out."
 sidebar:
   order: 1
 ---

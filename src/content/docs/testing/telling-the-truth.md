@@ -1,8 +1,10 @@
 ---
 title: "Making tests tell the truth"
 description:
-  "False passes, silent skips, what coverage and mutation testing actually
-  measure, and determinism."
+  "A test that cannot fail is worse than no test, and a green build is not
+  evidence that the feature works. Skipping is a decision, not a side effect,
+  coverage is not a goal, and determinism is your responsibility, not the
+  environment's."
 sidebar:
   order: 3
 ---

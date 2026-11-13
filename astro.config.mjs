@@ -3,6 +3,7 @@ import { defineConfig, passthroughImageService } from "astro/config";
 import starlight from "@astrojs/starlight";
 import { satteri } from "@astrojs/markdown-satteri";
 import { satteriRelativeMarkdownLinks } from "@system76/satteri-relative-markdown-links";
+import { sidebar } from "./src/sidebar.mjs";
 
 const base = "/field-guide/";
 
@@ -40,24 +41,7 @@ export default defineConfig({
       editLink: {
         baseUrl: "https://github.com/Emmberkat/field-guide/edit/main/",
       },
-      sidebar: [
-        {
-          label: "Design",
-          items: [{ autogenerate: { directory: "design" } }],
-        },
-        {
-          label: "Testing",
-          items: [{ autogenerate: { directory: "testing" } }],
-        },
-        {
-          label: "Shipping changes",
-          items: [{ autogenerate: { directory: "shipping" } }],
-        },
-        {
-          label: "Working with LLMs",
-          items: [{ autogenerate: { directory: "llms" } }],
-        },
-      ],
+      sidebar,
     }),
   ],
 });

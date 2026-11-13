@@ -1,8 +1,10 @@
 ---
 title: "One change per commit"
 description:
-  "Every commit is one complete change that builds, passes its tests, and is
-  safe to deploy on its own."
+  "Every commit is one complete change, with its tests, that builds, passes, and
+  is safe to deploy on its own. Keep mechanical changes apart from behavior
+  changes, use feature flags for rollout rather than to hide unfinished code,
+  make each pull request one commit, and write messages that say why."
 sidebar:
   order: 1
 ---

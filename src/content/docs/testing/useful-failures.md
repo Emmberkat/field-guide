@@ -1,8 +1,8 @@
 ---
 title: "Making failures useful"
 description:
-  "Model checks around meaningful outcomes and make every failure name the
-  mismatch."
+  "One check per meaningful outcome, and every failure names the mismatch: what
+  was expected, what happened, with the traceback intact."
 sidebar:
   order: 4
 ---

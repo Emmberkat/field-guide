@@ -2,7 +2,8 @@
 title: "Name things for what they are"
 description:
   "Helper, common, base, lib, util, and manager say nothing about what is
-  inside. A name that fits anything ends up holding everything."
+  inside. If you cannot name it, it is two things, and when what a thing is
+  changes, rename it in the same change."
 sidebar:
   order: 7
 ---

@@ -1,8 +1,10 @@
 ---
 title: "You are in charge"
 description:
-  "Hand the agent work like you would a junior engineer, turn its mistakes into
-  durable context, and never take its word as the final answer."
+  "Hand the agent work like you would a junior engineer, and never take its word
+  as the final answer: review its code, validate its answers against sources,
+  and check that it did what it said. Where it gets stuck becomes a durable
+  rule."
 sidebar:
   order: 2
 ---
