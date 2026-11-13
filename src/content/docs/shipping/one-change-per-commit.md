@@ -26,7 +26,7 @@ you had at 5pm is a log.
   and they will review the most obvious one carefully and skim the other two,
   which is exactly where the bug will be. And no reviewer can give a quality
   review of a massive commit, however careful they are. More in
-  [Reviewing code](../reviewing-code/).
+  [Reviewing code](reviewing-code.mdx).
 - Any commit can ship. If every commit is safe to deploy, nobody has to ask
   whether the one about to go out is in the middle of something.
 - The history explains itself. A year from now, `git blame` on a line should
@@ -59,7 +59,7 @@ It means it arrives as a sequence of commits, each complete in itself:
 Every step builds, passes, and is safe to deploy. At no point is there code that
 is half-written, or written and waiting for a caller that has not arrived yet.
 That second kind is just
-[speculative code](../../design/build-only-what-has-a-use/) with extra steps.
+[speculative code](../design/build-only-what-has-a-use.md) with extra steps.
 
 That sequence is for replacing something, where the old code gives you callers
 to move over. A brand-new feature has no caller except its users, so the first
@@ -73,7 +73,7 @@ feature to arrive before anything can reach it.
 Tests go in the same commit as the code they test. Code without its tests is not
 a complete change, and a separate "add tests" commit afterwards means the commit
 before it shipped untested. The
-[testing chapter](../../testing/shaping-code/#write-the-code-and-the-test-together)
+[testing chapter](../testing/shaping-code.mdx#write-the-code-and-the-test-together)
 has more on writing them together.
 
 ## Feature flags are for rollout, not for hiding unfinished code

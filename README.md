@@ -43,8 +43,13 @@ import { Tabs, TabItem } from "@astrojs/starlight/components";
 Keep the code fences at the start of the line, with a blank line on each side of
 every `<TabItem>` tag, or MDX will not treat them as code blocks.
 
-Link between pages with relative links (`../shaping-code/`), not absolute ones,
-so the site keeps working if the base path changes.
+Link between pages by linking to the other page's file, with a relative path:
+`[Shaping code](../testing/shaping-code.mdx#dont-patch)`. The links then work
+wherever the Markdown is read: in a clone, offline, or on GitHub.
+`@system76/satteri-relative-markdown-links` turns them into links to the pages
+on the site. `npm run check:links` runs [lychee](https://lychee.cli.rs/) on the
+Markdown and on the built site, and fails on a link to a file or heading that
+does not exist. It runs in `nix flake check`, so CI fails on a broken link.
 
 ## Formatting
 
@@ -63,7 +68,7 @@ git config blame.ignoreRevsFile .git-blame-ignore-revs
 ## With Nix (recommended)
 
 ```sh
-nix develop          # shell with Node
+nix develop          # shell with Node and lychee
 npm ci && npm run dev
 nix build            # static site in ./result
 nix run              # serve the build at http://localhost:8000/field-guide/
@@ -79,6 +84,7 @@ npm ci
 npm run dev          # live preview at http://localhost:4321/field-guide/
 npm run build        # static site in ./dist
 npm run preview      # serve ./dist
+npm run check:links  # check links after a build; needs lychee
 npm run format       # format everything with Prettier
 ```
 

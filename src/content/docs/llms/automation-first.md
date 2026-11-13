@@ -14,7 +14,7 @@ question depending on its context and on chance, and it can miss the one thing
 that mattered while commenting on five that did not.
 
 So every rule that can be a hard rule should be one, enforced by the
-[most reliable mechanism](../../shipping/reviewing-code/#repeated-comments-are-a-missing-mechanism)
+[most reliable mechanism](../shipping/reviewing-code.mdx#repeated-comments-are-a-missing-mechanism)
 you can get. An LLM is not on that ladder as a replacement for any rung.
 
 ## Where an LLM reviewer helps

@@ -39,7 +39,7 @@ expensive ones at the top. Treat the shape as a consequence of picking the
 cheapest layer each time, not as a quota to hit.
 
 And
-["can it be nothing?"](../../design/keep-it-simple/#reach-for-the-boring-option-first)
+["can it be nothing?"](../design/keep-it-simple.md#reach-for-the-boring-option-first)
 applies to tests too. A test with no failure mode behind it is a maintenance
 cost with no upside. It will still be there in three years, and someone will
 keep it passing during a refactor by weakening it.

@@ -23,7 +23,7 @@ routine task in this repo, the problem is not the prompt. It is that the repo
 does not explain itself. The prompt is the worst place for that knowledge: it is
 gone after one task, nobody else gets it, and you will type it again tomorrow.
 
-So the prompt carries the task, and the [context](../context-is-king/) carries
+So the prompt carries the task, and the [context](context-is-king.md) carries
 everything that is true about the project regardless of the task.
 
 ## Where it gets stuck becomes a rule
@@ -36,7 +36,7 @@ is small, and the agent gets better at your codebase over time instead of making
 the same mistake every week.
 
 This is the same idea as
-[repeated review comments being a missing mechanism](../../shipping/reviewing-code/#repeated-comments-are-a-missing-mechanism),
+[repeated review comments being a missing mechanism](../shipping/reviewing-code.mdx#repeated-comments-are-a-missing-mechanism),
 and the same ladder applies: prefer the fix that makes the mistake impossible or
 fails the build, then documentation, and only then a note that only the agent
 sees.
@@ -51,7 +51,7 @@ delivered in exactly the same tone as a correct answer. Tone tells you nothing.
 That means:
 
 - **Review its code** as you would any author's, and
-  [review it hostilely](../../shipping/reviewing-code/#assume-the-code-is-wrong).
+  [review it hostilely](../shipping/reviewing-code.mdx#assume-the-code-is-wrong).
   Generated code deserves more suspicion, not less, because it is written fast
   and reads well whether or not it is right.
 - **Validate its answers.** Do not assume an answer is correct because it is
@@ -60,7 +60,7 @@ That means:
   produce, or one that does not say what the agent claimed, is your answer.
 - **Check that it did what it said.** "I ran the tests and they pass" is a
   claim. The test output is evidence. A
-  [green build is not evidence that the feature works](../../testing/telling-the-truth/),
+  [green build is not evidence that the feature works](../testing/telling-the-truth.md),
   and neither is an agent saying so.
 
 If you cannot evaluate what the agent produced, you are not in a position to

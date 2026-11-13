@@ -28,6 +28,7 @@
               ./package.json
               ./package-lock.json
               ./astro.config.mjs
+              ./lychee.toml
               ./tsconfig.json
               ./src
               ./public
@@ -43,6 +44,18 @@
           npmConfigHook = pkgs.importNpmLock.npmConfigHook;
 
           env.ASTRO_TELEMETRY_DISABLED = "1";
+
+          doCheck = true;
+          nativeCheckInputs = [
+            pkgs.lychee
+            # lychee will not start without CA certificates, even offline.
+            pkgs.cacert
+          ];
+          checkPhase = ''
+            runHook preCheck
+            npm run check:links
+            runHook postCheck
+          '';
 
           installPhase = ''
             runHook preInstall
@@ -79,7 +92,10 @@
 
       devShells = forAllSystems (pkgs: {
         default = pkgs.mkShell {
-          packages = [ pkgs.nodejs ];
+          packages = [
+            pkgs.nodejs
+            pkgs.lychee
+          ];
           ASTRO_TELEMETRY_DISABLED = "1";
         };
       });

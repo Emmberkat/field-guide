@@ -29,8 +29,8 @@ Start at the first rung and climb only when the one you are on cannot do the
 job. The higher rungs are not bad. They are expensive, and the expense is paid
 by everyone who reads, debugs, and upgrades the code after you. The "can it be
 nothing?" question from the
-[testing chapter](../../testing/deciding-what-to-test/) is the first rung of
-this ladder.
+[testing chapter](../testing/deciding-what-to-test.md) is the first rung of this
+ladder.
 
 Dependencies deserve a special mention. A dependency is code you did not write
 and still have to maintain: its upgrades, its security advisories, its breaking
@@ -184,8 +184,8 @@ Code is read far more often than it is written, usually by someone in a hurry
 who did not write it. A clever one-liner saves its author a minute and costs
 every reader five. If a piece of code needs a comment to explain how it works,
 try writing the version that would not need one.
-[Save comments for why](../comments/).
+[Save comments for why](comments.md).
 
 Simple code is also the code that is easy to test. When the
-[first draft of a test](../../testing/shaping-code/#write-the-code-and-the-test-together)
+[first draft of a test](../testing/shaping-code.mdx#write-the-code-and-the-test-together)
 is painful to write, complexity is usually what it is telling you about.

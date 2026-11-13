@@ -68,7 +68,7 @@ profiles, change for different reasons and on different schedules. Merging them
 couples two things that have nothing to do with each other, and the first time
 one of them needs to change, you add a flag. A `utils` module is the same
 mistake at the file level: things that look shared, kept together for no better
-reason, under [a name that admits it](../naming/).
+reason, under [a name that admits it](naming.md).
 
 ## Getting out of a wrong abstraction
 
@@ -80,7 +80,7 @@ needs to be shared. If a real common piece remains, extract that, and only that.
 ## Seams are not speculation
 
 The testing chapter recommends
-[typing an injected collaborator](../../testing/shaping-code/#3-inject-what-is-left)
+[typing an injected collaborator](../testing/shaping-code.mdx#3-inject-what-is-left)
 as a `Protocol` or an interface. That is not an early abstraction. It has two
 implementations from the day it is written, the real one and the test stand-in,
 and it describes only the methods its caller actually uses. What I am arguing

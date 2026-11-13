@@ -24,7 +24,7 @@ likely it is to be approved with "looks good" because nobody could hold all of
 it in their head at once.
 
 This is one of the strongest reasons for
-[small, targeted, incremental commits](../one-change-per-commit/). A change that
+[small, targeted, incremental commits](one-change-per-commit.md). A change that
 does one thing can be checked thoroughly. As a reviewer, asking for a large
 change to be split up is a legitimate review comment, not an obstacle. You
 cannot review what you cannot read.
@@ -45,8 +45,7 @@ in here is wrong" reads to find it, and checks the parts everyone else skims:
   and most incidents happen on the other one.
 - What do the callers of the changed code assume, and does that still hold?
 - Would the tests fail if the code were wrong? A test that
-  [cannot fail](../../testing/telling-the-truth/) is a test you should not
-  count.
+  [cannot fail](../testing/telling-the-truth.md) is a test you should not count.
 - What is missing? The hardest bugs to see in a diff are the lines that are not
   there: the unhandled case, the missing migration, the caller that was not
   updated.
@@ -145,7 +144,7 @@ durable place to put it. Prefer the most reliable option you can get:
 
 1. Make the wrong thing impossible: a type that cannot hold the bad value, an
    API that does not offer the dangerous option. The same idea as
-   [making it impossible before you make it tested](../../testing/deciding-what-to-test/#make-it-impossible-before-you-make-it-tested).
+   [making it impossible before you make it tested](../testing/deciding-what-to-test.md#make-it-impossible-before-you-make-it-tested).
 2. Fail the build: a lint rule, a type check, a test, an architecture test.
 3. Catch it early but softly: an editor hint, a pre-commit hook, a template or
    scaffold that starts people in the right place.
@@ -216,7 +215,7 @@ Repeated comments are also evidence about your abstractions. If reviews keep
 saying "there is already a helper for this" or keep catching the same five lines
 reimplemented slightly differently, you now have the several real call sites
 that
-[tell you what the abstraction should be](../../design/dont-abstract-early/). If
+[tell you what the abstraction should be](../design/dont-abstract-early.md). If
 reviews keep catching the same misuse of an existing abstraction, it is probably
 the wrong shape: it makes the wrong thing easy. Reshape it, or remove it, so the
 mistake stops being possible.

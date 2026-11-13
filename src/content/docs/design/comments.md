@@ -88,7 +88,7 @@ def shutdown() -> None:
 ```
 
 The more often the norm is enforced, by a lint rule, a review comment, or a
-[guide like this one](../../shipping/reviewing-code/#repeated-comments-are-a-missing-mechanism),
+[guide like this one](../shipping/reviewing-code.mdx#repeated-comments-are-a-missing-mechanism),
 the more important the comment is. If a lint rule has to be suppressed for the
 line, the suppression is the place for it:
 `# noqa: TID251 -- runs before the clock is configured`, not a bare `# noqa`.
@@ -112,5 +112,5 @@ Commented-out code is not documentation. It is code that was not quite deleted,
 it rots immediately because nothing compiles or tests it, and every reader has
 to wonder whether it matters. Delete it. Version control remembers it. ruff's
 `ERA001` rule flags it automatically, which is the
-[durable option](../../shipping/reviewing-code/#repeated-comments-are-a-missing-mechanism)
+[durable option](../shipping/reviewing-code.mdx#repeated-comments-are-a-missing-mechanism)
 over asking for it in review.

@@ -34,7 +34,7 @@ Use it to answer questions:
 
 Then rebuild it properly, with the answers in hand: the right structure, real
 tests written alongside the code, the abstractions the prototype
-[showed you were needed](../../design/dont-abstract-early/) and none of the ones
+[showed you were needed](../design/dont-abstract-early.md) and none of the ones
 it showed you were not. The rebuild can use an LLM too. It goes better, because
 now you know what to ask for and can tell when the answer is wrong.
 
@@ -43,8 +43,8 @@ now you know what to ask for and can tell when the answer is wrong.
 The danger of a prototype is that it works well enough to keep. A prototype is
 written to learn, not to last: it skips error handling, cuts corners on
 structure, and has tests that, if it has any,
-[check what it happened to do](../../testing/telling-the-truth/) rather than
-what it should do. Polishing it into production code means carrying all of that
+[check what it happened to do](../testing/telling-the-truth.md) rather than what
+it should do. Polishing it into production code means carrying all of that
 forward.
 
 Decide it is a prototype before you start, keep it out of the main branch, and
