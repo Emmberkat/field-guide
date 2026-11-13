@@ -66,6 +66,12 @@
           meta.description = "Emma's Field Guide, built as a static site";
         };
 
+        # The guide for agents: AGENTS.md and every page's Markdown, the same
+        # folder the site serves under /agents/ and the "latest" release holds.
+        agents = pkgs.runCommandLocal "field-guide-agents" { } ''
+          cp -r ${self.packages.${pkgs.stdenv.hostPlatform.system}.default}/agents $out
+        '';
+
         # Serve the built site under its GitHub Pages base path.
         preview = pkgs.writeShellApplication {
           name = "field-guide-preview";
