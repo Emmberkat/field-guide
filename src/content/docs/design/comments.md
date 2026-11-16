@@ -3,7 +3,8 @@ title: "Comment the surprises"
 description:
   "The default is no comment: say it in code first. Comment what is not obvious
   and where the code deliberately breaks the norm, and delete commented-out
-  code. Docstrings on public APIs are fine."
+  code. A why about the change belongs in the commit message, not the file.
+  Docstrings on public APIs are fine."
 sidebar:
   order: 5
 ---
@@ -73,6 +74,28 @@ category:
 - A choice made for performance that makes the code less obvious than the simple
   version. Say what you measured.
 - Something that looks wrong and is not.
+
+## Some whys belong in the commit message
+
+Not every "why" earns a place in the file. A comment that records the decision
+that produced the current state is a one-time rationale. Once the change lands,
+it is just history:
+
+```python
+# Bumped to 2.3: 2.2 does not support the new server release.
+app = get_app("photosync", version="2.3")
+```
+
+You updated the server, so of course you updated the dependency that would not
+run against it. Nobody reading that line later is re-making that decision; they
+are reading code that already reflects it. The sentence adds nothing at rest,
+and it rots the moment the version moves on.
+
+That rationale belongs in the commit message, where it is tied to the diff and
+gives the reviewer the context to judge it. The commit message explains the
+change; the comment explains the code. A why about what you just did and why
+goes in the [message](../shipping/one-change-per-commit.md#messages-say-why); a
+why about what the code is and why it has to be that way goes in the file.
 
 ## Comment where you break the norm
 
